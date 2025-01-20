@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from django import forms
 
 
 class SignupForm(UserCreationForm):
@@ -24,3 +25,8 @@ class SignupForm(UserCreationForm):
                 'unique': 'Cette adresse email est déjà utilisée.'
             }
         }
+
+class UploadProfilePhotoForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ('profile_photo', )

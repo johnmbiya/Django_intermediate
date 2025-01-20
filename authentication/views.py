@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from . import forms
 
@@ -47,3 +48,13 @@ def signup_page(request):
     else:
         form = forms.SignupForm()
     return render(request, 'authentication/signup.html', {'form': form})
+
+@login_required
+def upload_profile_photo(request):
+    form = forms.UploadProfilePhotoForm(instance=request.user)
+    if request.method == 'POST':
+        form = forms.UploadProfilePhotoForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    return render(request, 'authentication/upload_profile_photo.html', {'form': form})
